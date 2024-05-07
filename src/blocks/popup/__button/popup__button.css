@@ -11,7 +11,7 @@
   border-radius: 2px;
   border: none;
   transition: visibility 0s, background 0.3s;
-  margin-top: 48px;
+  margin-top: 0;
 }
 
 .popup__button:hover {
@@ -19,9 +19,23 @@
   cursor: pointer;
 }
 
+.popup__button_inactive {
+  color: rgba(0, 0, 0, .2);
+  border: 1px solid rgba(0, 0, 0, .2);
+  background: #fff;
+}
+
+.popup__button_inactive:hover {
+  background: #fff;
+}
+
 @media screen and (max-width: 568px) {
   .popup__button {
     font-size: 14px;
     line-height: 17px;
   }
+}
+
+.popup__button-delete {
+  margin-top: 38px;
 }

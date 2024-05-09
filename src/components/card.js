@@ -1,6 +1,7 @@
 // Создание карточки
 export function createCard(
-  { placeItem, likes, id, isOwner, isLiked },
+  { createdAt, owner, name, _id, likes, link },
+  userId,
   openDeleteCard,
   likeCardButton,
   openCardImage
@@ -16,31 +17,46 @@ export function createCard(
 
   const likeCounter = cardElement.querySelector(".card__like-counter");
 
-  popupCard.src = placeItem.link;
-  popupCard.alt = placeItem.description;
-  popupCardTitle.textContent = placeItem.name;
+  popupCard.src = link;
+  popupCard.alt = name;
+  popupCardTitle.textContent = name;
 
-  likeCounter.textContent = likes;
+  likeCounter.textContent = likes.length;
 
-  if (isLiked) {
+  if (likes.some((like) => like._id === userId)) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
   likeButton.addEventListener("click", () =>
-    likeCardButton({ likeButton, likeCounter }, { id })
+    likeCardButton({ likeButton, likeCounter }, { id: _id })
   );
 
   popupCard.addEventListener("click", () => {
-    openCardImage(placeItem.link, placeItem.name);
+    openCardImage(link, name);
   });
 
-  if (isOwner) {
+  if (owner._id === userId) {
     deleteButton.addEventListener("click", () =>
-      openDeleteCard(id, cardElement)
+      openDeleteCard(_id, cardElement)
     );
   } else {
     deleteButton.classList.add("card__delete-button__invisible");
   }
 
   return cardElement;
+}
+
+// Функция удаления карточки
+export function deleteCard(deleteElement) {
+  deleteElement.remove();
+}
+
+export function deleteCardLike(likeButton, likeCounter, finalLikes) {
+  likeButton.classList.remove("card__like-button_is-active");
+  likeCounter.textContent = finalLikes;
+}
+
+export function addCardLike(likeButton, likeCounter, finalLikes) {
+  likeButton.classList.add("card__like-button_is-active");
+  likeCounter.textContent = finalLikes;
 }

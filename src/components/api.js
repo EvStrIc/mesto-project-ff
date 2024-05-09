@@ -7,16 +7,18 @@ const config = {
   },
 };
 
-// запрос данных профиля
-export const getUser = () => {
-  return fetch(`${config.baseUrl}/users/me`, { headers: config.headers })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
+// Проверка ответа сервера
+export function getResponseData(res) {
+  if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`); 
+  }
+  return res.json();
+};
 
-      return Promise.reject(`Oшибка: ${res.status}`);
-    })
+// запрос данных профиля
+export const getUser = (res) => {
+  return fetch(`${config.baseUrl}/users/me`, { headers: config.headers })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 };
 
@@ -27,13 +29,7 @@ export const updateUser = (user) => {
     headers: config.headers,
     body: JSON.stringify(user)
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Oшибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 };
 
@@ -44,13 +40,7 @@ export const updateAvatar = (user) => {
     headers: config.headers,
     body: JSON.stringify(user)
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Oшибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 };
 
@@ -59,12 +49,7 @@ export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 };
 
@@ -75,12 +60,7 @@ export const postCard = (card) => {
     headers: config.headers,
     body: JSON.stringify(card)
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 }
 
@@ -90,12 +70,7 @@ export const deleteCardRequest = (id) => {
     method: "DELETE",
     headers: config.headers,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 }
 
@@ -105,12 +80,7 @@ export const putLike = (id) => {
     method: "PUT",
     headers: config.headers,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 }
 
@@ -120,11 +90,6 @@ export const deleteLike = (id) => {
     method: "DELETE",
     headers: config.headers,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(getResponseData)
     .catch((err) => console.error(err));
 }

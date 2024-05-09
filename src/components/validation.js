@@ -2,18 +2,18 @@
 function showInputError(popupForm, popupInput, errorMessage) {
   const popupInputError = popupForm.querySelector(`.${popupInput.id}-error`);
 
-  popupInput.classList.add('popup__input_type_error');
+  popupInput.classList.add("popup__input_type_error");
   popupInputError.textContent = errorMessage;
-  popupInputError.classList.add('popup__input-error_active');
+  popupInputError.classList.add("popup__input-error_active");
 }
 
 // скрыть ошибку
 function hideInputError(popupForm, popupInput) {
   const popupInputError = popupForm.querySelector(`.${popupInput.id}-error`);
 
-  popupInput.classList.remove('popup__input_type_error');
-  popupInputError.classList.remove('popup__input-error_active');
-  popupInputError.textContent = '';
+  popupInput.classList.remove("popup__input_type_error");
+  popupInputError.classList.remove("popup__input-error_active");
+  popupInputError.textContent = "";
 }
 
 // проверка валидации
@@ -35,27 +35,34 @@ function checkInputValidity(popupForm, popupInput) {
 function hasInvalidInput(popupInputList) {
   return popupInputList.some((popupInput) => {
     return !popupInput.validity.valid;
-  })
+  });
+}
+
+// функция отключения кнопки подтверждения попапа
+function disablePopupButton(popupButton) {
+  popupButton.disabled = true;
+  popupButton.classList.add("popup__button_inactive");
 }
 
 // изменение состояния кнопки
 function toggleButtonState(popupInputList, popupButton) {
   if (hasInvalidInput(popupInputList)) {
-    popupButton.disabled = true;
-    popupButton.classList.add('popup__button_inactive');
+    disablePopupButton(popupButton);
   } else {
     popupButton.disabled = false;
-    popupButton.classList.remove('popup__button_inactive');
+    popupButton.classList.remove("popup__button_inactive");
   }
 }
 
 // обработчики полей формы
-function setEventListeners(popupForm) {
-  const popupInputList = Array.from(popupForm.querySelectorAll('.popup__input'));
-  const popupButton = popupForm.querySelector('.popup__button');
+function setEventListeners(popupForm, settings) {
+  const popupInputList = Array.from(
+    popupForm.querySelectorAll(settings.inputSelector)
+  );
+  const popupButton = popupForm.querySelector(settings.submitButtonSelector);
 
   popupInputList.forEach((popupInput) => {
-    popupInput.addEventListener('input', () => {
+    popupInput.addEventListener("input", () => {
       checkInputValidity(popupForm, popupInput);
       toggleButtonState(popupInputList, popupButton);
     });
@@ -63,27 +70,29 @@ function setEventListeners(popupForm) {
 }
 
 // включение валидации
-export function enableValidation() {
-  const popupFormList = Array.from(document.querySelectorAll('.popup__form'));
+export function enableValidation(settings) {
+  const popupFormList = Array.from(
+    document.querySelectorAll(settings.formSelector)
+  );
 
   popupFormList.forEach((popupForm) => {
-    popupForm.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-    })
-    setEventListeners(popupForm);
+    setEventListeners(popupForm, settings);
   });
 }
 
 // очистка ошибок валидации
 export function clearValidation(profileForm, validationConfig) {
-  const popupButton = profileForm.querySelector(validationConfig.submitButtonSelector);
-  const popupInputList = Array.from(profileForm.querySelectorAll(validationConfig.inputSelector));
+  const popupButton = profileForm.querySelector(
+    validationConfig.submitButtonSelector
+  );
+  const popupInputList = Array.from(
+    profileForm.querySelectorAll(validationConfig.inputSelector)
+  );
 
-  popupButton.disabled = true;
-  popupButton.classList.add('popup__button_inactive');
+  disablePopupButton(popupButton);
 
   popupInputList.forEach((popupInput) => {
     popupInput.setCustomValidity("");
     hideInputError(profileForm, popupInput);
-  })
+  });
 }

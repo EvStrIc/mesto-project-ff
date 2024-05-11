@@ -19,7 +19,6 @@ export function getResponseData(res) {
 export const getUser = (res) => {
   return fetch(`${config.baseUrl}/users/me`, { headers: config.headers })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 };
 
 // запрос обновления данных профиля
@@ -30,7 +29,6 @@ export const updateUser = (user) => {
     body: JSON.stringify(user)
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 };
 
 // запрос обновления аватара профиля
@@ -41,7 +39,6 @@ export const updateAvatar = (user) => {
     body: JSON.stringify(user)
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 };
 
 // запрос получения созданных карточек
@@ -50,7 +47,6 @@ export const getInitialCards = () => {
     headers: config.headers,
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 };
 
 // запрос создания карточки
@@ -61,7 +57,6 @@ export const postCard = (card) => {
     body: JSON.stringify(card)
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 }
 
 // запрос удаления карточки
@@ -71,7 +66,6 @@ export const deleteCardRequest = (id) => {
     headers: config.headers,
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 }
 
 // запрос постановки лайка
@@ -81,7 +75,6 @@ export const putLike = (id) => {
     headers: config.headers,
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 }
 
 // запрос удаления лайка
@@ -91,5 +84,4 @@ export const deleteLike = (id) => {
     headers: config.headers,
   })
     .then(getResponseData)
-    .catch((err) => console.error(err));
 }

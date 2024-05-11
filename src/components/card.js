@@ -51,12 +51,19 @@ export function deleteCard(deleteElement) {
   deleteElement.remove();
 }
 
+// Функция удаления лайка
 export function deleteCardLike(likeButton, likeCounter, finalLikes) {
   likeButton.classList.remove("card__like-button_is-active");
   likeCounter.textContent = finalLikes;
 }
 
+// Функция добавления лайка
 export function addCardLike(likeButton, likeCounter, finalLikes) {
   likeButton.classList.add("card__like-button_is-active");
   likeCounter.textContent = finalLikes;
+}
+
+// Функция определения активного состояния лайка
+export function checkAddedLike(likeButton) {
+    return likeButton.classList.contains("card__like-button_is-active");
 }

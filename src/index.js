@@ -1,5 +1,6 @@
 import {
   addCardLike,
+  checkAddedLike,
   createCard,
   deleteCard,
   deleteCardLike,
@@ -164,7 +165,7 @@ function openDeleteCard(id, element) {
 
 // Управление состоянием кнопки лайка и счетчиком лайков
 function likeCardButton({ likeButton, likeCounter }, { id }) {
-  if (likeButton.classList.contains("card__like-button_is-active")) {
+  if (checkAddedLike (likeButton)) {
     deleteLike(id)
       .then((res) => {
         deleteCardLike(likeButton, likeCounter, res.likes.length);

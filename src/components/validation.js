@@ -1,23 +1,23 @@
 // отображение ошибки
-function showInputError(popupForm, popupInput, errorMessage) {
+function showInputError(popupForm, popupInput, errorMessage, settings ) {
   const popupInputError = popupForm.querySelector(`.${popupInput.id}-error`);
 
-  popupInput.classList.add("popup__input_type_error");
+  popupInput.classList.add(settings.inputErrorClass);
   popupInputError.textContent = errorMessage;
-  popupInputError.classList.add("popup__input-error_active");
+  popupInputError.classList.add(settings.errorClass);
 }
 
 // скрыть ошибку
-function hideInputError(popupForm, popupInput) {
+function hideInputError(popupForm, popupInput, settings) {
   const popupInputError = popupForm.querySelector(`.${popupInput.id}-error`);
 
-  popupInput.classList.remove("popup__input_type_error");
-  popupInputError.classList.remove("popup__input-error_active");
+  popupInput.classList.remove(settings.inputErrorClass);
+  popupInputError.classList.remove(settings.errorClass);
   popupInputError.textContent = "";
 }
 
 // проверка валидации
-function checkInputValidity(popupForm, popupInput) {
+function checkInputValidity(popupForm, popupInput, settings) {
   if (popupInput.validity.patternMismatch) {
     popupInput.setCustomValidity(popupInput.dataset.errorMessage);
   } else {
@@ -25,9 +25,9 @@ function checkInputValidity(popupForm, popupInput) {
   }
 
   if (!popupInput.validity.valid) {
-    showInputError(popupForm, popupInput, popupInput.validationMessage);
+    showInputError(popupForm, popupInput, popupInput.validationMessage, settings);
   } else {
-    hideInputError(popupForm, popupInput);
+    hideInputError(popupForm, popupInput, settings);
   }
 }
 
@@ -39,32 +39,30 @@ function hasInvalidInput(popupInputList) {
 }
 
 // функция отключения кнопки подтверждения попапа
-function disablePopupButton(popupButton) {
+function disablePopupButton(popupButton, settings) {
   popupButton.disabled = true;
-  popupButton.classList.add("popup__button_inactive");
+  popupButton.classList.add(settings.inactiveButtonClass);
 }
 
 // изменение состояния кнопки
-function toggleButtonState(popupInputList, popupButton) {
+function toggleButtonState(popupInputList, popupButton, settings) {
   if (hasInvalidInput(popupInputList)) {
-    disablePopupButton(popupButton);
+    disablePopupButton(popupButton, settings);
   } else {
     popupButton.disabled = false;
-    popupButton.classList.remove("popup__button_inactive");
+    popupButton.classList.remove(settings.inactiveButtonClass);
   }
 }
 
 // обработчики полей формы
 function setEventListeners(popupForm, settings) {
-  const popupInputList = Array.from(
-    popupForm.querySelectorAll(settings.inputSelector)
-  );
+  const popupInputList = Array.from(popupForm.querySelectorAll(settings.inputSelector));
   const popupButton = popupForm.querySelector(settings.submitButtonSelector);
 
   popupInputList.forEach((popupInput) => {
     popupInput.addEventListener("input", () => {
-      checkInputValidity(popupForm, popupInput);
-      toggleButtonState(popupInputList, popupButton);
+      checkInputValidity(popupForm, popupInput, settings);
+      toggleButtonState(popupInputList, popupButton, settings);
     });
   });
 }
@@ -81,18 +79,16 @@ export function enableValidation(settings) {
 }
 
 // очистка ошибок валидации
-export function clearValidation(profileForm, validationConfig) {
-  const popupButton = profileForm.querySelector(
-    validationConfig.submitButtonSelector
-  );
+export function clearValidation(profileForm, settings) {
+  const popupButton = profileForm.querySelector(settings.submitButtonSelector);
   const popupInputList = Array.from(
-    profileForm.querySelectorAll(validationConfig.inputSelector)
+    profileForm.querySelectorAll(settings.inputSelector)
   );
 
-  disablePopupButton(popupButton);
+  disablePopupButton(popupButton, settings);
 
   popupInputList.forEach((popupInput) => {
     popupInput.setCustomValidity("");
-    hideInputError(profileForm, popupInput);
+    hideInputError(profileForm, popupInput, settings);
   });
 }
